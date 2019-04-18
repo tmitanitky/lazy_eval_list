@@ -1,5 +1,5 @@
 class lazy_eval_list(list):
-    # supposing used with bisect method.
+    # when used with bisect method, func must be monotonically increasing function
     def __init__(self, func, a, memorize=True):
         super().__init__(a)
         self._func = func
@@ -14,13 +14,7 @@ class lazy_eval_list(list):
     def __evaluate__(self, item):
         if item not in self._eval:
             self._eval[item] = self._func(item)
-        return self._eval[item]      
-    
-    def __str__(self):
-        return 'lazy_eval {} for {}\nevaluations: {}'.format(
-            self._func,
-            super().__repr__(),
-            [self._eval.get(item, None) for item in super().__getitem__(slice(0,len(self)))])
+        return self._eval[item]
     
     def __repr__(self):
         return 'lazy_eval_list({}, {})'.format(self._func, super().__repr__())
